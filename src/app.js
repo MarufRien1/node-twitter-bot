@@ -9,13 +9,15 @@ const {
   likeTweets,
 } = require('./twitter');
 
+//main function
 const main = async () => {
   const search = await getTweets();
 
   const filtered = await filterTweets(search);
 
+  // send data to browser to display
   app.get('/', (req, res) => {
-    res.send(search);
+    res.send(filtered);
   });
 };
 main();
