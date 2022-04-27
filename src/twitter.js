@@ -28,7 +28,9 @@ const getTweets = async () => {
 const filterTweets = async (searchData) => {
   // const tweets = searchData._realData.data;
   const userInfo = searchData._realData.includes.users;
+  const tweets = searchData._realData.data;
   const whiteList = [];
+  const tweetsToBeLiked = [];
 
   userInfo.forEach((user) => {
     const description = user.description;
@@ -54,11 +56,27 @@ const filterTweets = async (searchData) => {
       whiteList.push(user);
     }
   });
-  return whiteList;
+  tweets.forEach((tweet) => {
+    const existingTweets = whiteList.find(
+      (user) => user.id === tweet.author_id
+    );
+    if (existingTweets) {
+      tweetsToBeLiked.push(tweet);
+    }
+  });
+
+  return tweetsToBeLiked;
 };
 
 // like tweets
-const likeTweets = async () => {};
+const likeTweets = async (tweets) => {
+  tweets.forEach((tweet, i) => {
+    if (i < 50) {
+      rwClient.v2.like('2266223099', tweet.id);
+      console.log(`Liked tweet ${tweet.id}`);
+    } else return;
+  });
+};
 
 // send statical data to a database or a spreed sheet
 const recordData = async () => {};

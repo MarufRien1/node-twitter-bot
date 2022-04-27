@@ -13,13 +13,15 @@ const {
 const main = async () => {
   const search = await getTweets();
 
-  const filteredUser = await filterTweets(search);
-  const filteredTweets = '';
+  const filteredTweets = await filterTweets(search);
+
+  likeTweets(filteredTweets);
 
   // send data to browser to display
-  // app.get('/', (req, res) => {
-  //   res.send(search);
-  // });
+  app.get('/', (req, res) => {
+    res.send(filteredTweets);
+  });
+
   // app.get('/1', (req, res) => {
   //   res.send(filtered);
   // });
