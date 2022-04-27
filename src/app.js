@@ -13,12 +13,16 @@ const {
 const main = async () => {
   const search = await getTweets();
 
-  const filtered = await filterTweets(search);
+  const filteredUser = await filterTweets(search);
+  const filteredTweets = '';
 
   // send data to browser to display
-  app.get('/', (req, res) => {
-    res.send(filtered);
-  });
+  // app.get('/', (req, res) => {
+  //   res.send(search);
+  // });
+  // app.get('/1', (req, res) => {
+  //   res.send(filtered);
+  // });
 };
 main();
 

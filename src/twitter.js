@@ -19,6 +19,7 @@ const getTweets = async () => {
   const search = await rwClient.v2.search('#nodejs', {
     'user.fields': 'name,description',
     expansions: 'author_id',
+    max_results: 100,
   });
   return search;
 };
@@ -35,15 +36,21 @@ const filterTweets = async (searchData) => {
     const name = user.name;
 
     //check if any of the strings contains blacklisted words
-    const descriptionCheck = !blackListWords.some((word) =>
-      description.includes(word)
+    const descriptionCheck = blackListWords.some((word) =>
+      description.toLowerCase().includes(word)
     );
-    const usernameCheck = !blackListWords.some((word) =>
-      username.includes(word)
+    const usernameCheck = blackListWords.some((word) =>
+      username.toLowerCase().includes(word)
     );
-    const nameCheck = !blackListWords.some((word) => name.includes(word));
+    const nameCheck = blackListWords.some((word) =>
+      name.toLowerCase().includes(word)
+    );
 
-    if (descriptionCheck && usernameCheck && nameCheck) {
+    user.nameCheck = nameCheck;
+    user.usernameCheck = usernameCheck;
+    user.descriptionCheck = descriptionCheck;
+
+    if (!nameCheck && !usernameCheck && !descriptionCheck) {
       whiteList.push(user);
     }
   });
