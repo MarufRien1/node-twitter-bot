@@ -21,15 +21,13 @@ const main = async () => {
   app.get('/', (req, res) => {
     res.send(filteredTweets);
   });
-
-  // app.get('/1', (req, res) => {
-  //   res.send(filtered);
-  // });
 };
+
 main();
 
 // node server
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
