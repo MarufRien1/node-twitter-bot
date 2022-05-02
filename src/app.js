@@ -30,6 +30,10 @@ const main = async () => {
   // app.get('/', (req, res) => {
   //   res.send(filteredTweets);
   // });
+
+  console.log(
+    `successfully liked ${filteredTweets.length} tweets at ${Date.now()} `
+  );
 };
 
 setInterval(main, 900000);
@@ -38,5 +42,5 @@ setInterval(main, 900000);
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port} at ${Date.now()}`);
 });
