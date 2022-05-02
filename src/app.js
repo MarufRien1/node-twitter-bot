@@ -20,12 +20,10 @@ const main = async () => {
   }
 
   if (filteredTweets.length > 50) {
-    console.log('we have more then 50 tweets');
     const newTweets = filteredTweets.filter((tweet, i) => i < 50);
     filteredTweets = [...newTweets];
   }
 
-  console.log(filteredTweets.length);
   likeTweets(filteredTweets);
 
   // // send data to browser to display
@@ -34,7 +32,7 @@ const main = async () => {
   // });
 };
 
-setInterval(main, 30000);
+setInterval(main, 900000);
 
 // node server
 const port = process.env.PORT || 3000;
