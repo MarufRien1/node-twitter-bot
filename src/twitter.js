@@ -12,7 +12,7 @@ const blackListWords = [
 // get tweets with selected query
 const getTweets = async () => {
   try {
-    const search = await rwClient.v2.search('#nodejs', {
+    const search = await rwClient.v2.search(process.env.Q, {
       'user.fields': 'name,description',
       expansions: 'author_id',
       max_results: 100,
