@@ -1,17 +1,12 @@
-const rwClient = require('./auth.js');
+const { rwClient, rateLimitPlugin, ApiResponseError } = require('./auth.js');
 
 const blackListWords = [
   'bot',
   'robot',
   'retweet',
   'retweets',
-  'retweet',
-  'ai',
-  'machine',
-  'created',
-  'feed',
-  //usernames
-  'darkweb.Today',
+  '_bot',
+  '_robot',
 ];
 
 // get tweets with selected query
@@ -20,10 +15,10 @@ const getTweets = async () => {
     const search = await rwClient.v2.search('#nodejs', {
       'user.fields': 'name,description',
       expansions: 'author_id',
-      max_results: 10,
+      max_results: 100,
     });
     return search;
-  } catch {
+  } catch (err) {
     console.log('the error is', err);
   }
 };
@@ -71,7 +66,7 @@ const filterTweets = async (searchData) => {
     });
 
     return tweetsToBeLiked;
-  } catch {
+  } catch (err) {
     console.log('the error is', err);
   }
 };
@@ -85,9 +80,8 @@ const likeTweets = async (tweets) => {
     });
 
     tweets.forEach(async (tweet, i) => {
-      if (i < 50) {
+      if (i < 5) {
         const response = await rwClient.v2.like(currentUser, tweet.id);
-
         console.log(response);
       }
     });
@@ -99,7 +93,7 @@ const likeTweets = async (tweets) => {
 // send statical data to a database or a spreed sheet
 const recordData = async () => {
   try {
-  } catch {
+  } catch (err) {
     console.log('the error is', err);
   }
 };
