@@ -37,4 +37,4 @@ const main = async () => {
 };
 
 main();
-setInterval(main, 900000);
+setInterval(main, 1200000);
