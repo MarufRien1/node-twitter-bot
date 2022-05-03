@@ -1,5 +1,5 @@
+require('dotenv').config();
 const { rwClient, rateLimitPlugin, ApiResponseError } = require('./auth.js');
-
 const blackListWords = [
   'bot',
   'robot',
