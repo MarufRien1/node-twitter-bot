@@ -80,7 +80,7 @@ const likeTweets = async (tweets) => {
     });
 
     tweets.forEach(async (tweet, i) => {
-      if (i < 48) {
+      if (i < 2) {
         const response = await rwClient.v2.like(currentUser, tweet.id);
       }
     });

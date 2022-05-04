@@ -35,6 +35,6 @@ const main = async () => {
     `successfully liked ${filteredTweets.length} tweets at ${Date.now()} `
   );
 };
-
 main();
-setInterval(main, 1200000);
+
+setInterval(main, +process.env.INTERVAL);
