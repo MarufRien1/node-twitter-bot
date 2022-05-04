@@ -30,11 +30,11 @@ const main = async () => {
   // app.get('/', (req, res) => {
   //   res.send(filteredTweets);
   // });
-
-  console.log(
-    `successfully liked ${filteredTweets.length} tweets at ${Date.now()} `
-  );
 };
-main();
 
 setInterval(main, +process.env.INTERVAL);
+
+app.listen(process.env.PORT, () => {
+  //local
+  console.log('listening on port 3000');
+});

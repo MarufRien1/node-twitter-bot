@@ -17,6 +17,7 @@ const getTweets = async () => {
       expansions: 'author_id',
       max_results: 100,
     });
+    console.log('searching for tweets' + Date.now());
     return search;
   } catch (err) {
     console.log('the error is', err);
@@ -81,7 +82,8 @@ const likeTweets = async (tweets) => {
 
     tweets.forEach(async (tweet, i) => {
       if (i < 49) {
-        const response = await rwClient.v2.like(currentUser, tweet.id);
+        await rwClient.v2.like(currentUser, tweet.id);
+        console.log('like tweet' + Date.now());
       }
     });
   } catch (err) {
