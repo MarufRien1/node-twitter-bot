@@ -12,12 +12,12 @@ const {
 const main = async () => {
   const dummyData = {
     arrayOfTweets: [
-      { id: '1', text: 'test' },
-      { id: '2', text: 'test 2' },
+      { id: '1522419632438747137', text: 'test' },
+      { id: '1522486320463073283', text: 'test 2' },
     ],
   };
 
-  likeTweets(dummyData.arrayOfTweets[0]);
+  likeTweets(dummyData.arrayOfTweets);
 };
 
 main();
