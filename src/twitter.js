@@ -11,10 +11,40 @@ const blackListWords = [
 ];
 
 // get tweets with selected query
-const getTweets = async () => { };
+const getTweets = async () => {
+  try {
+    const currentLimit = await getLimitInfo("search")
+
+    if (currentLimit.limitFound && currentLimit.limit.remaining > 0) {
+      const search = await rwClient.v2.search(process.env.Q, {
+        'user.fields': 'name,description',
+        expansions: 'author_id',
+        max_results: 10,
+      });
+
+      const tweets = search._realData.data;
+      const userInfo = search._realData.includes.users;
+      if (tweets && userInfo) {
+        return { tweets, userInfo }
+      }
 
 
-const filterTweets = async () => { };
+      return search;
+
+    }
+
+
+
+
+  } catch (err) {
+    console.log("error at getTweets function\n" + err);
+  }
+};
+
+
+const filterTweets = async () => {
+
+};
 
 const likeTweets = async (tweets) => {
   try {
