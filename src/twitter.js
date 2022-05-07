@@ -19,7 +19,7 @@ const getTweets = async () => {
       const search = await rwClient.v2.search(process.env.Q, {
         'user.fields': 'name,description',
         expansions: 'author_id',
-        max_results: 10,
+        max_results: 100,
       });
 
       const tweets = search._realData.data;
@@ -89,7 +89,7 @@ const filterTweets = async (searchResult) => {
 
 const likeTweets = async (tweets) => {
   try {
-    const currentLimit = await getLimitInfo()
+    const currentLimit = await getLimitInfo("like")
     const currentUser = await getCurrentUser();
 
 

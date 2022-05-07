@@ -14,12 +14,13 @@ const main = async () => {
 
     const searchResult = await getTweets();
     const selectedTweets = await filterTweets(searchResult);
+    const operationResult = await likeTweets(selectedTweets);
+
 
     //////////////
-    console.log(selectedTweets);
     app.get("/", (req, res) => {
       ;
-      res.send(selectedTweets)
+      res.send(operationResult)
     })
 
     /////////////////
