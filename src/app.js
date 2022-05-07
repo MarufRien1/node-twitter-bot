@@ -12,8 +12,8 @@ const {
 const main = async () => {
   try {
 
-
-    const selectedTweets = await filterTweets();
+    const searchResult = await getTweets();
+    const selectedTweets = await filterTweets(searchResult);
 
     //////////////
     console.log(selectedTweets);
