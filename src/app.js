@@ -10,14 +10,24 @@ const {
 } = require('./twitter');
 
 const main = async () => {
-  const dummyData = {
-    arrayOfTweets: [
-      { id: '1522419632438747137', text: 'test' },
-      { id: '1522486320463073283', text: 'test 2' },
-    ],
-  };
+  try {
+    const dummyData = {
+      arrayOfTweets: [
+        { id: '1522419632438747137', text: 'test' },
+        { id: '1522486320463073283', text: 'test 2' },
+      ],
+    };
 
-  likeTweets(dummyData.arrayOfTweets);
+    const result = await likeTweets(dummyData.arrayOfTweets);
+    if (result.success) {
+      console.log(result);
+      console.log("success fully liked selected tweets");
+    } else {
+      console.log("failed to like selected tweets");
+    }
+
+
+  } catch (err) { console.log(err) }
 };
 
 main();

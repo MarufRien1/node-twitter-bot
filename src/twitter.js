@@ -47,24 +47,17 @@ const likeTweets = async (tweets) => {
       resetTime = Number(resetTime)
 
 
-      const diff = (resetTime - currentTime) / 1000 / 60
-      console.log(currentTime, resetTime, diff)
+      const diff = (resetTime - currentTime)
+
 
       return { success: true, remaining: diff }
 
     } else {
-      console.log("failed to like tweets");
+
+      return { success: false, remaining: undefined }
 
     }
-
-    // if has limit
-    //like tweet until limit is reached
-    // return limit and reset data
-
-    // else
-    // handel err 
-    // return error, limit and reset data   
-  } catch (err) { console.log(err); }
+  } catch (err) { console.log("error at likeTweet function\n" + err); }
 };
 
 
