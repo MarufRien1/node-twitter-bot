@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { rwClient, rateLimitPlugin, ApiResponseError } = require('./auth.js');
+const { getLimitInfo, getCurrentUser } = require("./helper")
 const blackListWords = [
   'bot',
   'robot',
@@ -12,24 +13,36 @@ const blackListWords = [
 // get tweets with selected query
 const getTweets = async () => {
   try {
-    const search = await rwClient.v2.search(process.env.Q, {
-      'user.fields': 'name,description',
-      expansions: 'author_id',
-      max_results: 100,
-    });
-    console.log('searching for tweets' + Date.now());
-    return search;
+    const currentLimit = await getLimitInfo("search")
+
+    if (currentLimit.limitFound && currentLimit.limit.remaining > 0) {
+      const search = await rwClient.v2.search(process.env.Q, {
+        'user.fields': 'name,description',
+        expansions: 'author_id',
+        max_results: 100,
+      });
+
+      const tweets = search._realData.data;
+      const userInfo = search._realData.includes.users;
+      if (tweets && userInfo) {
+        return { tweets, userInfo }
+      }
+
+
+      return search;
+
+    }
   } catch (err) {
-    console.log('the error is', err);
+    console.log("error at getTweets function\n" + err);
   }
 };
 
-// filter tweets,user,description for blacklisted words
-const filterTweets = async (searchData) => {
+
+const filterTweets = async (searchResult) => {
   try {
-    // const tweets = searchData._realData.data;
-    const userInfo = searchData._realData.includes.users;
-    const tweets = searchData._realData.data;
+    const tweets = searchResult.tweets
+    const userInfo = searchResult.userInfo;
+
     const whiteList = [];
     const tweetsToBeLiked = [];
 
@@ -66,37 +79,60 @@ const filterTweets = async (searchData) => {
       }
     });
 
-    return tweetsToBeLiked;
+    // return tweetsToBeLiked;
+    return tweetsToBeLiked
   } catch (err) {
     console.log('the error is', err);
   }
+
 };
 
-// like tweets
 const likeTweets = async (tweets) => {
   try {
-    //finding current user's id
-    const currentUser = await rwClient.v2.me().then((me) => {
-      return me.data.id;
-    });
+    const currentLimit = await getLimitInfo("like")
+    const currentUser = await getCurrentUser();
 
-    tweets.forEach(async (tweet, i) => {
-      if (i < 49) {
-        await rwClient.v2.like(currentUser, tweet.id);
-        console.log('like tweet' + Date.now());
+
+    if (currentLimit.limitFound && currentLimit.limit.remaining > 0) {
+
+      let maxLoops;
+
+      if (+currentLimit.limit.remaining >= tweets.length) {
+        maxLoops = tweets.length
+
+      } else {
+        maxLoops = +currentLimit.limit.remaining
       }
-    });
-  } catch (err) {
-    console.log('the error is', err);
-  }
+
+      for (let i = 0; i < maxLoops; i++) {
+
+        await rwClient.v2.like(currentUser.id, tweets[i].id)
+
+        console.log("liked tweet with id: " + tweets[i].id);
+      }
+
+      // calculate remaining time to next limit
+      const currentTime = Date.now()
+      let resetTime = currentLimit.limit.reset
+      resetTime = resetTime.toString() + "000"
+      resetTime = Number(resetTime)
+
+
+      const diff = (resetTime - currentTime)
+
+
+      return { success: true, remaining: diff }
+
+    } else {
+
+      return { success: false, remaining: undefined }
+
+    }
+  } catch (err) { console.log("error at likeTweet function\n" + err); }
 };
+
 
 // send statical data to a database or a spreed sheet
-const recordData = async () => {
-  try {
-  } catch (err) {
-    console.log('the error is', err);
-  }
-};
+const recordData = async () => { };
 
 module.exports = { getTweets, likeTweets, filterTweets, recordData };

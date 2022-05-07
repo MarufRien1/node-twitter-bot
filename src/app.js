@@ -9,32 +9,36 @@ const {
   likeTweets,
 } = require('./twitter');
 
-//main function
 const main = async () => {
-  let filteredTweets = [];
+  try {
 
-  while (filteredTweets.length < 49) {
-    const search = await getTweets();
-    const newTweets = await filterTweets(search);
-    filteredTweets = [...filteredTweets, ...newTweets];
-  }
+    const searchResult = await getTweets();
+    const selectedTweets = await filterTweets(searchResult);
+    const operationResult = await likeTweets(selectedTweets);
 
-  if (filteredTweets.length > 50) {
-    const newTweets = filteredTweets.filter((tweet, i) => i < 50);
-    filteredTweets = [...newTweets];
-  }
 
-  likeTweets(filteredTweets);
+    //////////////
+    app.get("/", (req, res) => {
+      ;
+      res.send(operationResult)
+    })
 
-  // // send data to browser to display
-  // app.get('/', (req, res) => {
-  //   res.send(filteredTweets);
-  // });
+    /////////////////
+
+    // likeTweets
+    // const result = await likeTweets(dummyData.arrayOfTweets);
+    // if (result.success) {
+    //   console.log(result);
+    //   console.log("success fully liked selected tweets");
+    // } else {
+    //   console.log("failed to like selected tweets");
+    // }
+
+
+  } catch (err) { console.log(err) }
 };
 
-setInterval(main, +process.env.INTERVAL);
+main();
 
-app.listen(process.env.PORT, () => {
-  //local
-  console.log('listening on port 3000');
-});
+
+app.listen(3000, () => { console.log("server in running"); })
