@@ -9,6 +9,7 @@ const {
   likeTweets,
 } = require('./twitter');
 
+app.get('/', (req, res) => { res.send('Node JS twitter bot') });
 const main = async () => {
   try {
 
@@ -21,3 +22,5 @@ const main = async () => {
 };
 
 setInterval(main, 1000 * 60 * 5);
+
+app.listen(process.env.PORT, () => { console.log('Server started') });
