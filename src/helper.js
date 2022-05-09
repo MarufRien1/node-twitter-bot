@@ -8,21 +8,24 @@ const getCurrentUser = async () => {
 
 const getLimitInfo = async (type) => {
 	try {
+		let limit
 		if (type === "like") {
-			let limit = await rateLimitPlugin.v2.getRateLimit('users/:id/likes', 'POST')
+			limit = await rateLimitPlugin.v2.getRateLimit('users/:id/likes', 'POST')
 
 			if (!limit) {
+
 				const { id } = await getCurrentUser();
 
 				// if limit not found  send new request to get limit info
-				await rwClient.v2.like(id, "1522271563487272960")
+				const testLike = await rwClient.v2.like(id, "1522271563487272960")
+				//! breaks when unable to like 
+				//TODO: handel error
+
+				console.log(testLike);
 
 				limit = await rateLimitPlugin.v2.getRateLimit('users/:id/likes', 'POST')
+				console.log(limit); //t
 				return { limitFound: true, limit: limit };
-
-
-
-
 
 			} else {
 				return { limitFound: false, limit: limit };
@@ -46,7 +49,7 @@ const getLimitInfo = async (type) => {
 
 		else { return { limitFound: false } }
 	} catch (err) {
-		console.log(err);
+
 
 	}
 }

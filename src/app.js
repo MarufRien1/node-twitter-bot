@@ -9,36 +9,18 @@ const {
   likeTweets,
 } = require('./twitter');
 
+app.get('/', (req, res) => { res.send('Node JS twitter bot') });
 const main = async () => {
   try {
 
     const searchResult = await getTweets();
     const selectedTweets = await filterTweets(searchResult);
     const operationResult = await likeTweets(selectedTweets);
-
-
-    //////////////
-    app.get("/", (req, res) => {
-      ;
-      res.send(operationResult)
-    })
-
-    /////////////////
-
-    // likeTweets
-    // const result = await likeTweets(dummyData.arrayOfTweets);
-    // if (result.success) {
-    //   console.log(result);
-    //   console.log("success fully liked selected tweets");
-    // } else {
-    //   console.log("failed to like selected tweets");
-    // }
-
+    console.log(operationResult);
 
   } catch (err) { console.log(err) }
 };
 
-main();
+setInterval(main, 1000 * 60 * 5);
 
-
-app.listen(3000, () => { console.log("server in running"); })
+app.listen(process.env.PORT, () => { console.log('Server started') });
