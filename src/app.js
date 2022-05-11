@@ -1,5 +1,6 @@
 const express = require('express');
 const fetch = require('node-fetch');
+require("dotenv").config()
 const app = express();
 const rateLimitPlugin = require('./auth');
 //local
@@ -20,11 +21,12 @@ const main = async () => {
     const searchResult = await getTweets();
     const selectedTweets = await filterTweets(searchResult);
     const operationResult = await likeTweets(selectedTweets);
-    console.log(operationResult);
+    console.log();
 
   } catch (err) { console.log(err) }
 };
 
-setInterval(main, 1000 * 60 * 1);
+setInterval(main, +process.env.INTERVAL);
+main()
 
 app.listen(process.env.PORT, () => { console.log('Server started') });
